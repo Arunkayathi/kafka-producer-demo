@@ -2,6 +2,7 @@ package com.kafkademo.libraryeventproducer.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kafkademo.libraryeventproducer.domain.LibraryEvent;
+import com.kafkademo.libraryeventproducer.domain.LibraryEventType;
 import com.kafkademo.libraryeventproducer.producer.LibraryEventProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,12 @@ public class LibraryEventsController {
         // libraryEventProducer.sendLibraryEventAsynchronous_Approach1(libraryEvent);
 
         //Asynchronous logic-approach2
+        libraryEvent.setLibraryEventType(LibraryEventType.NEW);
         libraryEventProducer.sendLibraryEventAsynchronous_Approach2(libraryEvent);
 
         //Synchronous logic
-//        SendResult<Integer, String> sendResult = libraryEventProducer.sendLibraryEventSynchronous(libraryEvent);
-//        log.info("Message sent successfully {}", sendResult.toString());
+        //SendResult<Integer, String> sendResult = libraryEventProducer.sendLibraryEventSynchronous(libraryEvent);
+        //log.info("Message sent successfully {}", sendResult.toString());
         return ResponseEntity.status(HttpStatus.CREATED).body(libraryEvent);
     }
 }
