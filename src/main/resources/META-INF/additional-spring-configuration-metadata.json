@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "kafka.producer.bootstrap-servers",
+      "type": "java.lang.String",
+      "description": "Description for kafka.producer.bootstrap-servers."
+    }
+  ]
+}
