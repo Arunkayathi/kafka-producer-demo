@@ -51,6 +51,7 @@ public class LibraryEventsControllerIntegrationTest {
         consumer = new DefaultKafkaConsumerFactory<>(configs, new IntegerDeserializer(), new StringDeserializer()).createConsumer();
         embeddedKafkaBroker.consumeFromEmbeddedTopics(consumer);
 
+
     }
 
     @AfterEach
@@ -83,6 +84,36 @@ public class LibraryEventsControllerIntegrationTest {
 
         //then
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        ConsumerRecord<Integer, String> consumerRecord = KafkaTestUtils.getSingleRecord(consumer, "library-event");
+        String value = consumerRecord.value();
+        LibraryEvent actualRecord = objectMapper.readValue(value, LibraryEvent.class);
+        assertEquals(libraryEvent.getBook(), actualRecord.getBook());
+
+    }
+
+    @Test
+    @Timeout(3)
+    void putLibraryEvent() throws JsonProcessingException {
+        //given
+        Book book = Book.builder()
+                .id(123)
+                .author("Dilip")
+                .name("Kafka using Spring Boot")
+                .build();
+
+        LibraryEvent libraryEvent = LibraryEvent.builder()
+                .libraryEventId(123)
+                .book(book)
+                .build();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("content-type", MediaType.APPLICATION_JSON.toString());
+        HttpEntity<LibraryEvent> request = new HttpEntity<>(libraryEvent, headers);
+
+        //when
+        ResponseEntity<LibraryEvent> responseEntity = restTemplate.exchange("/v1/library-event", HttpMethod.PUT, request, LibraryEvent.class);
+
+        //then
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         ConsumerRecord<Integer, String> consumerRecord = KafkaTestUtils.getSingleRecord(consumer, "library-event");
         String value = consumerRecord.value();
         LibraryEvent actualRecord = objectMapper.readValue(value, LibraryEvent.class);

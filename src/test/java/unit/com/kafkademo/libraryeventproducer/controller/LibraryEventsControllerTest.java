@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,6 +46,42 @@ public class LibraryEventsControllerTest {
         mockMvc.perform(post("/v1/library-event")
                 .contentType(MediaType.APPLICATION_JSON).content(body))
                 .andExpect(status().isCreated());
+
+    }
+
+
+    @Test
+    void putLibraryEvent() throws Exception {
+
+        Book book = Book.builder().author("Amish").id(1).name("Immortals of Meluha").build();
+
+
+        LibraryEvent libraryEvent = LibraryEvent.builder().book(book).libraryEventId(1).libraryEventType(LibraryEventType.UPDATE).build();
+
+        when(libraryEventProducer.sendLibraryEventAsynchronous_Approach2(libraryEvent)).thenReturn(null);
+
+        String body = objectMapper.writeValueAsString(libraryEvent);
+        mockMvc.perform(put("/v1/library-event")
+                .contentType(MediaType.APPLICATION_JSON).content(body))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    void putLibraryEvent_throwsException() throws Exception {
+
+        Book book = Book.builder().author("Amish").id(1).name("Immortals of Meluha").build();
+
+
+        LibraryEvent libraryEvent = LibraryEvent.builder().book(book).libraryEventId(null).libraryEventType(LibraryEventType.UPDATE).build();
+
+        when(libraryEventProducer.sendLibraryEventAsynchronous_Approach2(libraryEvent)).thenReturn(null);
+
+        String body = objectMapper.writeValueAsString(libraryEvent);
+        mockMvc.perform(put("/v1/library-event")
+                .contentType(MediaType.APPLICATION_JSON).content(body))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Please pass a valid library event id"));
 
     }
 

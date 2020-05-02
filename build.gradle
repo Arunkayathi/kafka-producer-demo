@@ -27,6 +27,7 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     testImplementation 'org.springframework.kafka:spring-kafka-test'
+    testCompile group: 'com.github.charithe', name: 'kafka-junit', version: '1.1'
 }
 
 sourceSets{

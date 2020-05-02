@@ -1,4 +1,4 @@
-package com.kafkademo.libraryeventproducer.configuration;
+package com.kafkademo.libraryeventproducer.config;
 
 
 import org.apache.kafka.clients.producer.ProducerConfig;
