@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
@@ -36,7 +37,7 @@ public class LibraryEventsControllerIntegrationTest {
     @Autowired
     TestRestTemplate restTemplate;
 
-    @Autowired
+    @MockBean
     EmbeddedKafkaBroker embeddedKafkaBroker;
 
     @Autowired

@@ -14,7 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,7 +39,7 @@ public class LibraryEventsControllerTest {
 
         LibraryEvent libraryEvent = LibraryEvent.builder().book(book).libraryEventId(1).libraryEventType(LibraryEventType.NEW).build();
 
-        doNothing().when(libraryEventProducer).sendLibraryEventAsynchronous_Approach2(libraryEvent);
+        when(libraryEventProducer.sendLibraryEventAsynchronous_Approach2(libraryEvent)).thenReturn(null);
 
         String body = objectMapper.writeValueAsString(libraryEvent);
         mockMvc.perform(post("/v1/library-event")
@@ -56,7 +56,7 @@ public class LibraryEventsControllerTest {
 
         LibraryEvent libraryEvent = LibraryEvent.builder().book(book).libraryEventId(1).libraryEventType(LibraryEventType.NEW).build();
 
-        doNothing().when(libraryEventProducer).sendLibraryEventAsynchronous_Approach2(libraryEvent);
+        when(libraryEventProducer.sendLibraryEventAsynchronous_Approach2(libraryEvent)).thenReturn(null);
 
         String expectedErrorMessage = "book.author - must not be blank";
         String body = objectMapper.writeValueAsString(libraryEvent);
