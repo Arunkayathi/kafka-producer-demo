@@ -25,9 +25,13 @@ public class LibraryEventsController {
     LibraryEventProducer libraryEventProducer;
 
     @PostMapping("/v1/library-event")
-    public ResponseEntity<LibraryEvent> postLibraryEvent(@RequestBody @Valid LibraryEvent libraryEvent) throws JsonProcessingException, ExecutionException, InterruptedException, TimeoutException {
+    public ResponseEntity<?> postLibraryEvent(@RequestBody @Valid LibraryEvent libraryEvent) throws JsonProcessingException, ExecutionException, InterruptedException, TimeoutException {
         //invoke kafka producer
 
+
+        if (libraryEvent.getLibraryEventId() != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("library event id property should be null");
+        }
         //Asynchronous logic-approach1
         // libraryEventProducer.sendLibraryEventAsynchronous_Approach1(libraryEvent);
 

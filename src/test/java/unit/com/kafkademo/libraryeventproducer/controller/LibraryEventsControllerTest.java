@@ -49,6 +49,23 @@ public class LibraryEventsControllerTest {
 
     }
 
+    @Test
+    void postLibraryEvent_throwsException() throws Exception {
+
+        Book book = Book.builder().author("Amish").id(1).name("Immortals of Meluha").build();
+
+
+        LibraryEvent libraryEvent = LibraryEvent.builder().book(book).libraryEventId(1).libraryEventType(LibraryEventType.NEW).build();
+
+        when(libraryEventProducer.sendLibraryEventAsynchronous_Approach2(libraryEvent)).thenReturn(null);
+
+        String body = objectMapper.writeValueAsString(libraryEvent);
+        mockMvc.perform(post("/v1/library-event")
+                .contentType(MediaType.APPLICATION_JSON).content(body))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("library event id property should be null"));
+
+    }
 
     @Test
     void putLibraryEvent() throws Exception {
